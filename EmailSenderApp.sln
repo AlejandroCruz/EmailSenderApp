@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSenderApp", "EmailSenderApp.csproj", "{2DBC01B2-04D4-4EB9-A27E-8161D5BB92FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailSenderApp", "EmailSenderApp.csproj", "{2DBC01B2-04D4-4EB9-A27E-8161D5BB92FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\ConsoleApp1\ConsoleApp1.csproj", "{91A8AFF4-822D-4C24-A861-B10C0901524E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreWebApp", "..\AspNetCoreWebApp\AspNetCoreWebApp.csproj", "{94DD1C1A-B5C0-48ED-92CE-E589A422BB9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{2DBC01B2-04D4-4EB9-A27E-8161D5BB92FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DBC01B2-04D4-4EB9-A27E-8161D5BB92FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DBC01B2-04D4-4EB9-A27E-8161D5BB92FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91A8AFF4-822D-4C24-A861-B10C0901524E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91A8AFF4-822D-4C24-A861-B10C0901524E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91A8AFF4-822D-4C24-A861-B10C0901524E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91A8AFF4-822D-4C24-A861-B10C0901524E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94DD1C1A-B5C0-48ED-92CE-E589A422BB9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94DD1C1A-B5C0-48ED-92CE-E589A422BB9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94DD1C1A-B5C0-48ED-92CE-E589A422BB9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94DD1C1A-B5C0-48ED-92CE-E589A422BB9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
