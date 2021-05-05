@@ -13,9 +13,9 @@ namespace EmailSenderApp
             // Set connection with configuration file
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory()) // GetCurrentDirectory --> .exe dir
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Add JSON configuration provider
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-                .AddEnvironmentVariables();
+                .AddEnvironmentVariables(); // Add environment variables configuration provider
 
             // Set Serilog logger
             Log.Logger = new LoggerConfiguration()
@@ -29,7 +29,15 @@ namespace EmailSenderApp
 
             // Continue with app init
             // - Host: responsible for app startup and lifetime management.
-            var host = Host.CreateDefaultBuilder();
+            // - ConfigureServices: Where configuration options are set by convention.
+            // -- Called by the host before the Configure method to configure the app's services.
+            // -- Is optional.
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                })
+                .UseSerilog()
+                .Build();
         }
     }
 }
