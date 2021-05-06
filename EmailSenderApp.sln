@@ -5,9 +5,14 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailSenderApp", "EmailSenderApp.csproj", "{2DBC01B2-04D4-4EB9-A27E-8161D5BB92FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\ConsoleApp1\ConsoleApp1.csproj", "{91A8AFF4-822D-4C24-A861-B10C0901524E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "..\ConsoleApp1\ConsoleApp1.csproj", "{91A8AFF4-822D-4C24-A861-B10C0901524E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreWebApp", "..\AspNetCoreWebApp\AspNetCoreWebApp.csproj", "{94DD1C1A-B5C0-48ED-92CE-E589A422BB9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreWebApp", "..\AspNetCoreWebApp\AspNetCoreWebApp.csproj", "{94DD1C1A-B5C0-48ED-92CE-E589A422BB9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A7BE598D-22EA-4929-BD1E-0F6B6F37395C}"
+	ProjectSection(SolutionItems) = preProject
+		README.txt = README.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
