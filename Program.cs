@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
@@ -8,7 +9,7 @@ namespace EmailSenderApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static async System.Threading.Tasks.Task Main(string[] args)
         {
             // Set connection with configuration file
             var builder = new ConfigurationBuilder();
@@ -25,7 +26,7 @@ namespace EmailSenderApp
                 .CreateLogger();
 
             // Start logger
-            Log.Logger.Information("Start Application");
+            Log.Logger.Information("Start EmailSenderApp");
 
             // Continue with app init
             // - Host: responsible for app startup and lifetime management.
@@ -35,9 +36,20 @@ namespace EmailSenderApp
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddTransient<TransactionHandler>();
                 })
                 .UseSerilog()
                 .Build();
+
+            await RunAsync(host);
+        }
+
+        private static async System.Threading.Tasks.Task RunAsync(IHost host)
+        {
+            var transHandler = host.Services.GetRequiredService<TransactionHandler>();
+            string transResponse = await transHandler.GetDataAsync();
+
+            Console.WriteLine($"\nAPI response: {transResponse}");
         }
     }
 }
