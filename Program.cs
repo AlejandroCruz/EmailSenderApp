@@ -4,12 +4,13 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace EmailSenderApp
 {
     class Program
     {
-        static async System.Threading.Tasks.Task Main(string[] args)
+        static async System.Threading.Tasks.Task Main()
         {
             // Set connection with configuration file
             var builder = new ConfigurationBuilder();
@@ -41,13 +42,33 @@ namespace EmailSenderApp
                 .UseSerilog()
                 .Build();
 
-            await RunAsync(host);
+            int tokenId = ParseConsoleInput();
+            await RunAsync(host, tokenId);
+
+            Console.ReadKey();
         }
 
-        private static async System.Threading.Tasks.Task RunAsync(IHost host)
+        private static int ParseConsoleInput()
+        {
+            Console.Write("Enter token ID: ");
+            string inputId = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(inputId))
+            {
+                return 0;
+            }
+            else
+            {
+                bool parseString = int.TryParse(inputId, out int num);
+
+                return (parseString) ? num : 0;
+            }
+        }
+
+        private static async System.Threading.Tasks.Task RunAsync(IHost host, int tokenId)
         {
             var transHandler = host.Services.GetRequiredService<TransactionHandler>();
-            string transResponse = await transHandler.GetDataAsync();
+            string transResponse = await transHandler.GetDataAsync(tokenId);
 
             Console.WriteLine($"\nAPI response: {transResponse}");
         }

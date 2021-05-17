@@ -15,12 +15,13 @@ namespace EmailSenderApp
 
         public TransactionHandler() => _httpClient = new HttpClient();
 
-        public async Task<string> GetDataAsync()
+        public async Task<string> GetDataAsync(int tokenId)
         {
             _httpClient.BaseAddress = new Uri("https://localhost:5001/");
 
-            string uri = _httpClient.BaseAddress.ToString() + "api/TodoItems";
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
+            string uri = _httpClient.BaseAddress.ToString() + ((tokenId == 0) ? "api/TodoItems" : $"api/TodoItems/{tokenId}");
+
+            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
 
             HttpResponseMessage httpResponse = await _httpClient.SendAsync(httpRequestMessage, default);
 
