@@ -12,6 +12,8 @@ namespace EmailSenderApp
     {
         static async System.Threading.Tasks.Task Main()
         {
+            bool endApp = true;
+
             // Set connection with configuration file
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory()) // GetCurrentDirectory --> .exe dir
@@ -42,15 +44,16 @@ namespace EmailSenderApp
                 .UseSerilog()
                 .Build();
 
-            int tokenId = ParseConsoleInput();
-            await RunAsync(host, tokenId);
-
-            Console.ReadKey();
+            while (endApp)
+            {
+                int tokenId = ParseConsoleInput();
+                endApp = await RunAsync(host, tokenId);
+            }
         }
 
         private static int ParseConsoleInput()
         {
-            Console.Write("Enter token ID: ");
+            Console.Write("\nEnter token ID: ");
             string inputId = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(inputId))
@@ -65,12 +68,16 @@ namespace EmailSenderApp
             }
         }
 
-        private static async System.Threading.Tasks.Task RunAsync(IHost host, int tokenId)
+        private static async Task<bool> RunAsync(IHost host, int tokenId)
         {
             var transHandler = host.Services.GetRequiredService<TransactionHandler>();
             string transResponse = await transHandler.GetDataAsync(tokenId);
 
             Console.WriteLine($"\nAPI response: {transResponse}");
+            Console.WriteLine("\nContinue?: Y/N");
+            string inputExitContinue = Console.ReadLine();
+
+            return (inputExitContinue.ToLower() == "y" ? true : false);
         }
     }
 }
