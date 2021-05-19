@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using EmailSenderApp.DataInfrastructure;
 using Microsoft.EntityFrameworkCore;
+using EmailSenderApp.DataInfrastructure.Repositories;
 
 namespace EmailSenderApp
 {
@@ -18,7 +19,7 @@ namespace EmailSenderApp
             bool endApp = true;
 
             // Set connection with configuration file
-            IConfiguration builder = new ConfigurationBuilder()
+            IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory()) // GetCurrentDirectory --> .exe dir
                 .AddJsonFile("AppConfig/appsettings.json", optional: false, reloadOnChange: true) // Add JSON configuration provider
                 .AddJsonFile($"AppConfig/appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
@@ -27,7 +28,7 @@ namespace EmailSenderApp
 
             // Set Serilog logger
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder)
+                .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
@@ -43,9 +44,10 @@ namespace EmailSenderApp
             var host = Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddTransient<TransactionHandler>();
+                    //services.AddTransient<TransactionHandler>();
+                    services.AddTransient<TransactionRepository>();
                     services.AddDbContext<TransactionContext>(options =>
-                        options.UseSqlServer(builder.GetConnectionString("BusinessTransactionDB"))
+                        options.UseSqlServer(configuration["ConnectionStrings:BusinessDB"])
                     );
                 })
                 .UseSerilog()
@@ -77,8 +79,11 @@ namespace EmailSenderApp
 
         private static async Task<bool> RunAsync(IHost host, int tokenId)
         {
-            var transHandler = host.Services.GetRequiredService<TransactionHandler>();
-            string transResponse = await transHandler.GetTodoItemDataAsync(tokenId);
+            //var transHandler = host.Services.GetRequiredService<TransactionHandler>();
+            //string transResponse = await transHandler.GetTodoItemDataAsync(tokenId);
+
+            TransactionRepository transaction = host.Services.GetRequiredService<TransactionRepository>();
+            string transResponse = await transaction.GetTransactionsAsync();
 
             Console.WriteLine($"\nAPI response: {transResponse}");
             Console.WriteLine("\nContinue?: Y/N");
