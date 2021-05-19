@@ -12,6 +12,6 @@ namespace EmailSenderApp.DataInfrastructure
         public TransactionContext(DbContextOptions<TransactionContext> options) : base(options)
         { }
 
-        public DbSet<OrderTransaction> OrderTransactions { get; set; } // TODO
+        //public DbSet<OrderTransaction> OrderTransactions { get; set; } // TODO
     }
 }
