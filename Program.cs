@@ -6,6 +6,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
+using EmailSenderApp.DataInfrastructure;
+using Microsoft.EntityFrameworkCore;
+
 namespace EmailSenderApp
 {
     class Program
@@ -15,15 +18,16 @@ namespace EmailSenderApp
             bool endApp = true;
 
             // Set connection with configuration file
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory()) // GetCurrentDirectory --> .exe dir
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Add JSON configuration provider
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-                .AddEnvironmentVariables(); // Add environment variables configuration provider
+            IConfiguration builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory()) // GetCurrentDirectory --> .exe dir
+                .AddJsonFile("AppConfig/appsettings.json", optional: false, reloadOnChange: true) // Add JSON configuration provider
+                .AddJsonFile($"AppConfig/appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                .AddEnvironmentVariables() // Add environment variables configuration provider
+                .Build();
 
             // Set Serilog logger
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Build())
+                .ReadFrom.Configuration(builder)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
@@ -40,6 +44,9 @@ namespace EmailSenderApp
                 .ConfigureServices((context, services) =>
                 {
                     services.AddTransient<TransactionHandler>();
+                    services.AddDbContext<TransactionContext>(options =>
+                        options.UseSqlServer(builder.GetConnectionString("BusinessTransactionDB"))
+                    );
                 })
                 .UseSerilog()
                 .Build();
@@ -71,7 +78,7 @@ namespace EmailSenderApp
         private static async Task<bool> RunAsync(IHost host, int tokenId)
         {
             var transHandler = host.Services.GetRequiredService<TransactionHandler>();
-            string transResponse = await transHandler.GetDataAsync(tokenId);
+            string transResponse = await transHandler.GetTodoItemDataAsync(tokenId);
 
             Console.WriteLine($"\nAPI response: {transResponse}");
             Console.WriteLine("\nContinue?: Y/N");

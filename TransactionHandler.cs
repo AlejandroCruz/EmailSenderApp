@@ -15,7 +15,7 @@ namespace EmailSenderApp
 
         public TransactionHandler() => _httpClient = new HttpClient();
 
-        public async Task<string> GetDataAsync(int tokenId)
+        public async Task<string> GetTodoItemDataAsync(int tokenId)
         {
             _httpClient.BaseAddress = new Uri("https://localhost:5001/");
 
