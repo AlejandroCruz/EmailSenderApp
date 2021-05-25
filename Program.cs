@@ -14,7 +14,7 @@ namespace EmailSenderApp
 {
     class Program
     {
-        static async System.Threading.Tasks.Task Main()
+        static async Task Main()
         {
             bool endApp = true;
 
