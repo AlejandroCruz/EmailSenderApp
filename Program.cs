@@ -1,95 +1,91 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using EmailSenderApp.DataInfrastructure;
+using EmailSenderApp.DataInfrastructure.Repositories;
+using EmailSenderApp.Domain.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-
-using EmailSenderApp.DataInfrastructure;
-using Microsoft.EntityFrameworkCore;
-using EmailSenderApp.DataInfrastructure.Repositories;
 
 namespace EmailSenderApp
 {
     class Program
     {
+        private static IConfiguration _configuration;
+        private static IServiceProvider _serviceProvider;
+
         static async Task Main()
         {
-            bool endApp = true;
+            SetConfiguration();
+            SetLogger();
+            ConfigureServices();
 
-            // Set connection with configuration file
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory()) // GetCurrentDirectory --> .exe dir
-                .AddJsonFile("AppConfig/appsettings.json", optional: false, reloadOnChange: true) // Add JSON configuration provider
+            await ApplicationProcess();
+
+            //DisposeResources();
+        }
+
+        private static void SetConfiguration()
+        {
+            _configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory()) // .exe dir
+                .AddJsonFile("AppConfig/appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"AppConfig/appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-                .AddEnvironmentVariables() // Add environment variables configuration provider
+                .AddEnvironmentVariables()
                 .Build();
+        }
 
-            // Set Serilog logger
+        private static void SetLogger()
+        {
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
+                .ReadFrom.Configuration(_configuration)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
+        }
 
-            // Start logger
-            Log.Logger.Information("Start EmailSenderApp");
+        private static void ConfigureServices()
+        {
+            IServiceCollection services = new DefaultServiceProviderFactory()
+                .CreateBuilder(new ServiceCollection());
 
-            // Continue with app init
-            // - Host: responsible for app startup and lifetime management.
-            // - ConfigureServices: Where configuration options are set by convention.
-            // -- Called by the host before the Configure method to configure the app's services.
-            // -- Is optional.
-            var host = Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) =>
+            services.AddDbContext<OrderContext>((_, options) =>
+            {
+                options.UseSqlServer(_configuration.GetConnectionString("Default"));
+            });
+            services.AddScoped<OrderRepository>();
+
+            _serviceProvider = services.BuildServiceProvider();
+        }
+
+        private static async Task ApplicationProcess()
+        {
+            Log.Logger.Information("Getting orders.");
+
+            //string sql = $@"SELECT Id, Name FROM {_configuration["Database"]}.dbo.Names";
+            OrderRepository repository = _serviceProvider.GetRequiredService<OrderRepository>();
+            IEnumerable<Order> orders = await repository.GetOrdersAsync();
+
+            if (orders != default)
+            {
+                Console.WriteLine("Printing orders:"); 
+
+                foreach (Order order in orders)
                 {
-                    //services.AddTransient<TransactionHandler>();
-                    services.AddTransient<TransactionRepository>();
-                    services.AddDbContext<TransactionContext>(options =>
-                        options.UseSqlServer(configuration["ConnectionStrings:BusinessDB"])
-                    );
-                })
-                .UseSerilog()
-                .Build();
-
-            while (endApp)
-            {
-                int tokenId = ParseConsoleInput();
-                endApp = await RunAsync(host, tokenId);
+                    Console.WriteLine($"{order.OrderNumber} - {order.OrderDate}");
+                }
             }
+
         }
 
-        private static int ParseConsoleInput()
+        private static void DisposeResources()
         {
-            Console.Write("\nEnter token ID: ");
-            string inputId = Console.ReadLine();
-
-            if (string.IsNullOrWhiteSpace(inputId))
-            {
-                return 0;
-            }
-            else
-            {
-                bool parseString = int.TryParse(inputId, out int num);
-
-                return (parseString) ? num : 0;
-            }
-        }
-
-        private static async Task<bool> RunAsync(IHost host, int tokenId)
-        {
-            //var transHandler = host.Services.GetRequiredService<TransactionHandler>();
-            //string transResponse = await transHandler.GetTodoItemDataAsync(tokenId);
-
-            TransactionRepository transaction = host.Services.GetRequiredService<TransactionRepository>();
-            string transResponse = await transaction.GetTransactionsAsync();
-
-            Console.WriteLine($"\nAPI response: {transResponse}");
-            Console.WriteLine("\nContinue?: Y/N");
-            string inputExitContinue = Console.ReadLine();
-
-            return (inputExitContinue.ToLower() == "y" ? true : false);
+            throw new NotImplementedException();
         }
     }
 }
