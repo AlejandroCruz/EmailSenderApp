@@ -1,4 +1,4 @@
-﻿using EmailSenderApp.Domain.Data.Entities;
+﻿using EmailSenderApp.Domain.DataEntities;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System;
@@ -11,7 +11,7 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
     public class OrderRepository
     {
         private OrderContext _orderContext;
-        
+
         public OrderRepository(OrderContext orderContext)
         {
             _orderContext = orderContext;

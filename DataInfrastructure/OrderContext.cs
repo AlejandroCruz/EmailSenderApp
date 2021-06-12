@@ -1,10 +1,5 @@
-﻿using EmailSenderApp.Domain.Data.Entities;
+﻿using EmailSenderApp.Domain.DataEntities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmailSenderApp.DataInfrastructure
 {
@@ -12,7 +7,7 @@ namespace EmailSenderApp.DataInfrastructure
     {
         public OrderContext(DbContextOptions<OrderContext> options) : base(options)
         { }
-        
+
         public DbSet<Order> Orders { get; set; }
     }
 }
