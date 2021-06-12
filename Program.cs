@@ -15,6 +15,7 @@ namespace EmailSenderApp
     class Program
     {
         const string DOTNET_ENVIRONMENT = "DOTNET_ENVIRONMENT";
+        const string CONFIG_FILE = "AppConfig/appsettings";
         static IConfiguration _configuration;
 
         static async Task Main(string[] args)
@@ -62,8 +63,8 @@ namespace EmailSenderApp
             {
                 configHost.Sources.Clear();
                 
-                _configuration = configHost.AddJsonFile("AppConfig/appsettings.json", optional: false, reloadOnChange: true)
-                   .AddJsonFile($"AppConfig/appsettings.{environment.ToString() ?? "Production"}.json", optional: true)
+                _configuration = configHost.AddJsonFile($"{CONFIG_FILE}.json", optional: false, reloadOnChange: true)
+                   .AddJsonFile($"{CONFIG_FILE}.{environment.ToString() ?? "Production"}.json", optional: true)
                    //.AddUserSecrets<Program>()
                    .Build();
             });
