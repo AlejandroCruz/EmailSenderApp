@@ -14,7 +14,8 @@ namespace EmailSenderApp
 {
     class Program
     {
-        private static IConfiguration _configuration;
+        const string DOTNET_ENVIRONMENT = "DOTNET_ENVIRONMENT";
+        static IConfiguration _configuration;
 
         static async Task Main(string[] args)
         {
@@ -30,7 +31,7 @@ namespace EmailSenderApp
             //DisposeResources();
         }
 
-        private static async Task ApplicationProcess(IHost host)
+        static async Task ApplicationProcess(IHost host)
         {
             Log.Logger.Information("Getting orders.");
 
@@ -43,40 +44,44 @@ namespace EmailSenderApp
 
                 foreach (Order order in orders)
                 {
-                    Console.WriteLine($"{order.OrderNumber} - {order.OrderDate}");
+                    Console.WriteLine(
+                        $"{order.ID}, {order.OrderNumber}," +
+                        $" ${order.OrderAmount} " +
+                        $"- {order.OrderDate}, " +
+                        $"Date created: {order.CreatedTimestamp}");
                 }
             }
 
         }
 
-        private static IHostBuilder AppConfiguration(IHostBuilder hostBuilder)
+        static IHostBuilder AppConfiguration(IHostBuilder hostBuilder)
         {
-            return hostBuilder.ConfigureAppConfiguration((hostingContext, config) =>
+            string environment = Environment.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
+
+            return hostBuilder.ConfigureHostConfiguration(configHost =>
             {
-                config.Sources.Clear();
-
-                IHostEnvironment environment = hostingContext.HostingEnvironment;
-
-                _configuration = config.AddJsonFile("AppConfig/appsettings.json", optional: false, reloadOnChange: true)
-                   .AddJsonFile($"AppConfig/appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                configHost.Sources.Clear();
+                
+                _configuration = configHost.AddJsonFile("AppConfig/appsettings.json", optional: false, reloadOnChange: true)
+                   .AddJsonFile($"AppConfig/appsettings.{environment.ToString() ?? "Production"}.json", optional: true)
                    //.AddUserSecrets<Program>()
                    .Build();
             });
         }
 
-        private static IHost AppServices(IHostBuilder hostBuilder)
+        static IHost AppServices(IHostBuilder hostBuilder)
         {
             hostBuilder.ConfigureServices(services =>
             {
                 services.AddDbContext<OrderContext>(options =>
                     options.UseSqlServer( _configuration.GetConnectionString("Default") ));
-                services.AddTransient<OrderRepository>();
+                services.AddScoped<OrderRepository>();
             });
 
             return hostBuilder.Build();
         }
 
-        private static void SetLogger()
+        static void SetLogger()
         {
             // TODO - ACruz: How to print log levels (info/warning/error)
             Log.Logger = new LoggerConfiguration()
@@ -86,7 +91,7 @@ namespace EmailSenderApp
                 .CreateLogger();
         }
 
-        private static void DisposeResources()
+        static void DisposeResources()
         {
             throw new NotImplementedException();
         }

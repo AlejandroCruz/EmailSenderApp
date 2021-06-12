@@ -11,7 +11,7 @@ namespace EmailSenderApp
 {
     public class TransactionHandler
     {
-        private HttpClient _httpClient;
+        HttpClient _httpClient;
 
         public TransactionHandler() => _httpClient = new HttpClient();
 

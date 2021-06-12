@@ -10,7 +10,7 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
 {
     public class OrderRepository
     {
-        private OrderContext _orderContext;
+        OrderContext _orderContext;
 
         public OrderRepository(OrderContext orderContext)
         {
