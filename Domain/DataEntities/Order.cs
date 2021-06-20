@@ -58,8 +58,7 @@ namespace EmailSenderApp.Domain.DataEntities
         public bool? Error { get; set; }
 
         [Required]
-        [Timestamp]
-        public DateTime CreatedTimestamp { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; }
 
         public DateTime? DateModified { get; set; }
     }

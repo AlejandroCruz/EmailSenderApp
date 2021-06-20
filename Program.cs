@@ -8,13 +8,14 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EmailSenderApp
 {
     class Program
     {
-        const string DOTNET_ENVIRONMENT = "DOTNET_ENVIRONMENT";
+        const string ENVIRONMENT_VAR = "DOTNET_ENVIRONMENT";
         const string CONFIG_FILE = "AppConfig/appsettings";
         static IConfiguration _configuration;
 
@@ -34,14 +35,15 @@ namespace EmailSenderApp
 
         static async Task ApplicationProcess(IHost host)
         {
-            Log.Logger.Information("Getting orders.");
+            Log.Logger.Information("Getting orders:\n");
 
             OrderRepository repository = host.Services.GetRequiredService<OrderRepository>();
             IEnumerable<Order> orders = await repository.GetOrdersAsync();
 
-            if (orders != default)
+            if (orders.Count() > 0)
             {
-                Console.WriteLine("Printing orders:");
+                Console.WriteLine(Environment.NewLine);
+                Log.Logger.Information("Printing orders:");
 
                 foreach (Order order in orders)
                 {
@@ -49,7 +51,28 @@ namespace EmailSenderApp
                         $"{order.ID}, {order.OrderNumber}," +
                         $" ${order.OrderAmount} " +
                         $"- {order.OrderDate}, " +
-                        $"Date created: {order.CreatedTimestamp}");
+                        $"Date created: {order.CreatedDate}");
+                }
+            }
+            else
+            {
+                Console.WriteLine(Environment.NewLine);
+                Log.Logger.Information("DB seeded...");
+                Console.WriteLine(Environment.NewLine);
+
+                await repository.InsertTestData();
+                orders = await repository.GetOrdersAsync();
+
+                Console.WriteLine(Environment.NewLine);
+                Log.Logger.Information("Printing orders:");
+
+                foreach (Order order in orders)
+                {
+                    Console.WriteLine(
+                        $"{order.ID}, {order.OrderNumber}," +
+                        $" ${order.OrderAmount} " +
+                        $"- {order.OrderDate}, " +
+                        $"Date created: {order.CreatedDate}");
                 }
             }
 
@@ -57,7 +80,7 @@ namespace EmailSenderApp
 
         static IHostBuilder AppConfiguration(IHostBuilder hostBuilder)
         {
-            string environment = Environment.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
+            string environment = Environment.GetEnvironmentVariable(ENVIRONMENT_VAR);
 
             return hostBuilder.ConfigureHostConfiguration(configHost =>
             {

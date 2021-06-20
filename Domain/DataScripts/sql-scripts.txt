@@ -1,0 +1,103 @@
+﻿# Script Table as INSERT
+USE [DefaultDevelopment]
+GO
+
+INSERT INTO [dbo].[Orders]
+           ([OrderNumber]
+           ,[TransactionId]
+           ,[DocumentId]
+           ,[OrderAmount]
+           ,[OrderTax]
+           ,[OrderDate]
+           ,[OrderRequestDate]
+           ,[OrderStarttime]
+           ,[OrderEndtime]
+           ,[IsApproved]
+           ,[IsRetrieved]
+           ,[Message]
+           ,[UserName]
+           ,[UserEmail]
+           ,[PickupName]
+           ,[FreightCode]
+           ,[StateCode]
+           ,[Error]
+           ,[CreatedTimestamp]
+           ,[DateModified])
+     VALUES
+           (<OrderNumber, nvarchar(max),>
+           ,<TransactionId, nvarchar(max),>
+           ,<DocumentId, nvarchar(max),>
+           ,<OrderAmount, decimal(18,2),>
+           ,<OrderTax, decimal(18,2),>
+           ,<OrderDate, datetime2(7),>
+           ,<OrderRequestDate, datetime2(7),>
+           ,<OrderStarttime, datetime2(7),>
+           ,<OrderEndtime, datetime2(7),>
+           ,<IsApproved, bit,>
+           ,<IsRetrieved, bit,>
+           ,<Message, nvarchar(max),>
+           ,<UserName, nvarchar(max),>
+           ,<UserEmail, nvarchar(max),>
+           ,<PickupName, nvarchar(max),>
+           ,<FreightCode, nvarchar(max),>
+           ,<StateCode, nvarchar(2),>
+           ,<Error, bit,>
+           ,<CreatedTimestamp, datetime2(7),>
+           ,<DateModified, datetime2(7),>)
+GO
+
+# Insertinto table rows with values
+INSERT INTO [dbo].[Orders]
+            ([OrderNumber]
+           ,[TransactionId]
+           ,[DocumentId]
+           ,[OrderAmount]
+           ,[OrderDate]
+           ,[OrderRequestDate]
+           ,[OrderStarttime]
+           ,[OrderEndtime]
+           ,[UserName]
+           ,[UserEmail]
+           ,[PickupName]
+           ,[StateCode]
+     VALUES
+           ('101','1A','101-A',1.99,'20210605','6/10/2021 12:00:00 AM','6/10/2021 8:00:00 AM','6/10/2021 11:00:00 AM','Bilko Bellington','mail@mail','Polar Bear','PR')
+GO
+-- ('101','2A','101-B',10.00,'6/5/2021 9:00:00 AM','6/10/2021 12:00:00 AM','6/10/2021 8:00:00 AM','6/10/2021 11:00:00 AM','Bilko Bellington','mail@mail','Polar Bear','PR')
+-- ('202','1A','101-A',15.00,'6/1/2021 9:00:00 PM','6/2/2021 12:00:00 AM','6/3/2021 8:00:00 PM','6/3/2021 11:00:00 PM','Mr. Porter','mporter@mail','FL')
+
+# Migration value check with interest in *'CreatedTimestamp = table.Column<byte[]>(type: "rowversion"...'
+protected override void Up(MigrationBuilder migrationBuilder)
+{
+    migrationBuilder.CreateTable(
+        name: "Orders",
+        columns: table => new
+        {
+            ID = table.Column<int>(type: "int", nullable: false)
+                .Annotation("SqlServer:Identity", "1, 1"),
+            OrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            DocumentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            OrderAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+            OrderTax = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+            OrderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+            OrderRequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+            OrderStarttime = table.Column<DateTime>(type: "datetime2", nullable: false),
+            OrderEndtime = table.Column<DateTime>(type: "datetime2", nullable: false),
+            IsApproved = table.Column<bool>(type: "bit", nullable: true),
+            IsRetrieved = table.Column<bool>(type: "bit", nullable: true),
+            Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            UserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+            PickupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            FreightCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+            StateCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
+            Error = table.Column<bool>(type: "bit", nullable: true),
+            CreatedTimestamp = table.Column<DateTime>(type: "datetime2", defaultValueSql: "CURRENT_TIMESTAMP", nullable: false),
+            DateModified = table.Column<DateTime>(type: "datetime2", nullable: true)
+        },
+        constraints: table =>
+        {
+            table.PrimaryKey("PK_Orders", x => x.ID);
+        });
+}
