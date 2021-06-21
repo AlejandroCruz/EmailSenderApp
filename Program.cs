@@ -42,17 +42,7 @@ namespace EmailSenderApp
 
             if (orders.Count() > 0)
             {
-                Console.WriteLine(Environment.NewLine);
-                Log.Logger.Information("Printing orders:");
-
-                foreach (Order order in orders)
-                {
-                    Console.WriteLine(
-                        $"{order.ID}, {order.OrderNumber}," +
-                        $" ${order.OrderAmount} " +
-                        $"- {order.OrderDate}, " +
-                        $"Date created: {order.CreatedDate}");
-                }
+                DebugPrintResults(orders);
             }
             else
             {
@@ -63,17 +53,7 @@ namespace EmailSenderApp
                 await repository.InsertTestData();
                 orders = await repository.GetOrdersAsync();
 
-                Console.WriteLine(Environment.NewLine);
-                Log.Logger.Information("Printing orders:");
-
-                foreach (Order order in orders)
-                {
-                    Console.WriteLine(
-                        $"{order.ID}, {order.OrderNumber}," +
-                        $" ${order.OrderAmount} " +
-                        $"- {order.OrderDate}, " +
-                        $"Date created: {order.CreatedDate}");
-                }
+                DebugPrintResults(orders);
             }
 
         }
@@ -118,6 +98,21 @@ namespace EmailSenderApp
         static void DisposeResources()
         {
             throw new NotImplementedException();
+        }
+
+        private static void DebugPrintResults(IEnumerable<Order> orders)
+        {
+            Console.WriteLine(Environment.NewLine);
+            Log.Logger.Information("Printing orders:");
+
+            foreach (Order order in orders)
+            {
+                Console.WriteLine(
+                    $"{order.ID}, {order.OrderNumber}," +
+                    $" ${order.OrderAmount} " +
+                    $"- {order.OrderDate}, " +
+                    $"Date created: {order.CreatedDate}");
+            }
         }
     }
 }
