@@ -1,6 +1,7 @@
 ﻿using EmailSenderApp.DataInfrastructure;
 using EmailSenderApp.DataInfrastructure.Repositories;
 using EmailSenderApp.Domain.DataEntities;
+using EmailSenderApp.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -77,9 +78,11 @@ namespace EmailSenderApp
         {
             hostBuilder.ConfigureServices(services =>
             {
-                services.AddDbContext<OrderContext>(options =>
-                    options.UseSqlServer( _configuration.GetConnectionString("Default") ));
-                services.AddScoped<OrderRepository>();
+                services
+                    .AddOrdersContext(_configuration.GetConnectionString("Default"))
+                    .AddRepositories();
+                    //.AddEmailProcess()
+                    //.AddEmailBuilder();
             });
 
             return hostBuilder.Build();
