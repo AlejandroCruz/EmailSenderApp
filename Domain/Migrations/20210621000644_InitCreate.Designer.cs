@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmailSenderApp.Domain.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20210620002528_InitCreate")]
+    [Migration("20210621000644_InitCreate")]
     partial class InitCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,7 +28,7 @@ namespace EmailSenderApp.Domain.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedTimestamp")
+                    b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -56,7 +56,7 @@ namespace EmailSenderApp.Domain.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("OrderAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,3)");
 
                     b.Property<DateTime?>("OrderDate")
                         .HasColumnType("datetime2");
@@ -75,7 +75,7 @@ namespace EmailSenderApp.Domain.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("OrderTax")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(7,3)");
 
                     b.Property<string>("PickupName")
                         .HasColumnType("nvarchar(max)");
