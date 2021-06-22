@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmailSenderApp.Domain.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20210621000644_InitCreate")]
+    [Migration("20210622011324_InitCreate")]
     partial class InitCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,7 @@ namespace EmailSenderApp.Domain.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DocumentId")
+                    b.Property<string>("DocumentNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -51,9 +51,6 @@ namespace EmailSenderApp.Domain.Migrations
 
                     b.Property<bool?>("IsRetrieved")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("OrderAmount")
                         .HasColumnType("decimal(10,3)");
@@ -85,7 +82,10 @@ namespace EmailSenderApp.Domain.Migrations
                         .HasMaxLength(2)
                         .HasColumnType("nvarchar(2)");
 
-                    b.Property<string>("TransactionId")
+                    b.Property<string>("TransMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
