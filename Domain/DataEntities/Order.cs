@@ -10,7 +10,7 @@ namespace EmailSenderApp.Domain.DataEntities
         public int ID { get; set; }
         public string OrderNumber { get; set; }
         public string DocumentNumber { get; set; }
-        public string PayTransNumber { get; set; } = null;
+        public string PayTransNumber { get; set; }
         public decimal OrderAmount { get; set; }
         public decimal? OrderTax { get; set; }
         public string StateCode { get; set; }

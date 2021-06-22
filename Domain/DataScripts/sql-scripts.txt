@@ -65,42 +65,6 @@ GO
 -- ('101','2A','101-B',10.00,'6/5/2021 9:00:00 AM','6/10/2021 12:00:00','6/10/2021 8:00:00 AM','6/10/2021 11:00:00 AM','Bilko Bellington','mail@mail','Polar Bear','PR')
 -- ('202','1A','101-A',15.00,'6/1/2021 9:00:00 PM','6/2/2021 12:00:00','6/3/2021 8:00:00 PM','6/3/2021 11:00:00 PM','Mr. Porter','mporter@mail','FL')
 
---# Migration value check
-protected override void Up(MigrationBuilder migrationBuilder)
-{
-    migrationBuilder.CreateTable(
-        name: "Orders",
-        columns: table => new
-        {
-            ID = table.Column<int>(type: "int", nullable: false)
-                .Annotation("SqlServer:Identity", "1, 1"),
-            Error = table.Column<bool>(type: "bit", nullable: true),
-            IsApproved = table.Column<bool>(type: "bit", nullable: true),
-            IsRetrieved = table.Column<bool>(type: "bit", nullable: true),
-            CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-            OrderEndtime = table.Column<DateTime>(type: "datetime2", nullable: false),
-            OrderRequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-            OrderStarttime = table.Column<DateTime>(type: "datetime2", nullable: false),
-            DateModified = table.Column<DateTime>(type: "datetime2", nullable: true),
-            OrderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-            OrderAmount = table.Column<decimal>(type: "decimal(10,3)", nullable: false),
-            OrderTax = table.Column<decimal>(type: "decimal(7,3)", nullable: true),
-            DocumentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-            FreightCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-            Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
-            OrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-            PickupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-            StateCode = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
-            TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-            UserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-            UserName = table.Column<string>(type: "nvarchar(max)", nullable: false)
-        },
-        constraints: table =>
-        {
-            table.PrimaryKey("PK_Orders", x => x.ID);
-        });
-}
-
 --# CREATE TABLE [BusinessDatabase].dbo.BusinessOrder
  /*
    Monday, June 21, 20216:33:10 PM
@@ -122,25 +86,25 @@ SET ANSI_WARNINGS ON
 COMMIT
 BEGIN TRANSACTION
 GO
-CREATE TABLE dbo.BusinessOrder
-	(
-	Id int NOT NULL IDENTITY (1, 1),
-	OrderNumber nvarchar(50) NOT NULL,
-	DocumentNumber nvarchar(50) NOT NULL,
-	PayTransNumber nvarchar(50) NULL, -------- NULL
-	Amount decimal(11, 2) NOT NULL,
-	Tax decimal(6, 3) NULL, ------------------ NULL
-	State nchar(2) NOT NULL,
-	IsApproved bit NULL, --------------------- NULL
-	FreightCode nvarchar(50) NOT NULL,
-	OrderDate date NOT NULL,
-	FreightDate datetime2(2) NOT NULL,
-	FreightStarttime datetime2(2) NOT NULL,
-	FreightEndtime datetime2(2) NOT NULL,
-	UserName nvarchar(100) NOT NULL,
-	UserEmail nvarchar(100) NOT NULL,
-	PickupName nvarchar(50) NULL, ------------ NULL
-	)  ON [PRIMARY]
+CREATE TABLE [dbo].[BusinessOrder](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[OrderNumber] [nvarchar](50) NOT NULL,
+	[DocumentNumber] [nvarchar](50) NOT NULL,
+	[PayTransNumber] [nvarchar](50) NOT NULL,
+	[Amount] [decimal](11, 2) NOT NULL,
+	[Tax] [decimal](6, 3) NULL,
+	[State] [nchar](2) NOT NULL,
+	[FreightCode] [nvarchar](50) NOT NULL,
+	[IsRetrieved] [nchar](3) NULL,
+	[IsApproved] [nchar](3) NULL,
+	[OrderDate] [nvarchar](50) NOT NULL,
+	[FreightDate] [nvarchar](50) NOT NULL,
+	[FreightStarttime] [nvarchar](50) NOT NULL,
+	[FreightEndtime] [nvarchar](50) NOT NULL,
+	[UserName] [nvarchar](100) NOT NULL,
+	[UserEmail] [nvarchar](100) NOT NULL,
+	[PickupName] [nvarchar](50) NULL
+) ON [PRIMARY]
 GO
 ALTER TABLE dbo.BusinessOrder SET (LOCK_ESCALATION = TABLE)
 GO
@@ -153,9 +117,11 @@ GO
 INSERT INTO [dbo].[BusinessOrder]
            ([OrderNumber]
            ,[DocumentNumber]
+		   ,[PayTransNumber]
            ,[Amount]
            ,[State]
            ,[FreightCode]
+		   ,[IsRetrieved]
            ,[OrderDate]
            ,[FreightDate]
            ,[FreightStarttime]
@@ -164,9 +130,39 @@ INSERT INTO [dbo].[BusinessOrder]
            ,[UserEmail]
            ,[PickupName])
      VALUES
-           ('1001', '1001-A', 1.99, 'PR', 'R', '6/5/2021',  '6/10/2021', '6/10/2021 8:0', '6/10/2021 13:30', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
+           ('1001', '1001-A', ' 0987654321 ', 1.99, 'PR', 'R', '6/5/2021',  '6/10/2021', '0800', '1000', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
 GO
--- ('1001', '1001-A', 1.99, 'PR', 'R', '6/5/2021',  '6/10/2021', '6/10/2021 8:0', '6/10/2021 13:30', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
--- ('1001', '1001-B', 10.00, 'PR', 'R', '6/5/2021', '6/10/2021', '6/10/2021 8:0', '6/11/2021 13:30', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
--- ('1004', '1004-A', 1000.99, 'fl', 'e', '6/22/2021', '6/22/2021', '6/22/2021 10:0', '6/22/2021 17:30', 'Mr. Porter', 'mporter@mail', 'Mr. Porter')
+-- ('1001', '1001-A', ' 0987654321 ', 1.99, 'PR', 'R', '6/5/2021',  '6/10/2021', '0800', '1000', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
+-- ('1001', '1001-B', ' 0987654312 ', 10.00, 'PR', 'R', '6/5/2021', '6/10/2021', '1100', '1330', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
+-- ('1004', '1004-A', ' 0987654123 ', 1000.99, 'fl', 'e', '6/22/2021', '6/22/2021', '1000', '1730', 'Mr. Porter', 'mporter@mail', 'Mr. Porter')
 -- time	hh:mm:ss[.nnnnnnn]
+
+--# CREATE PROCEDURE [dbo].[spEmailSenderApp_GetSourceData]
+DROP PROCEDURE [dbo].[spEmailSenderApp_GetSourceData]
+GO
+--
+-- Author:		Alejandro Cruz
+-- Create date: 6/22/2021
+-- Description:	Get source data
+--
+CREATE PROCEDURE [dbo].[spEmailSenderApp_GetSourceData]
+AS
+DECLARE @r INT = 0;
+SET @r = (
+	SELECT COUNT(*)
+	FROM  dbo.BusinessOrder AS B
+	WHERE B.IsRetrieved IS NULL
+	OR LTRIM(B.IsRetrieved) = ''
+	OR LOWER(LTRIM( RTRIM(B.IsRetrieved) )) = '0'
+	OR LOWER(LTRIM( RTRIM(B.IsRetrieved) )) = 'n'
+	OR LOWER(LTRIM( RTRIM(B.IsRetrieved) )) = 'no');
+
+IF @r > 0
+BEGIN TRANSACTION;
+USE DefaultDevelopment;
+SET NOCOUNT ON;
+INSERT INTO dbo.Orders
+		()
+	SELECT
+		FROM dbo.BusinessOrder AS BO
+		WHERE

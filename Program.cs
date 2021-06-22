@@ -39,6 +39,8 @@ namespace EmailSenderApp
             Log.Logger.Information("Getting orders:\n");
 
             OrderRepository repository = host.Services.GetRequiredService<OrderRepository>();
+            repository.ExecuteDbFunction(_configuration["SQLFunctions:spGetSourceData"]);
+
             IEnumerable<Order> orders = await repository.GetOrdersAsync();
 
             if (orders.Count() > 0)
@@ -47,11 +49,12 @@ namespace EmailSenderApp
             }
             else
             {
+                await repository.InsertTestData();
+
                 Console.WriteLine(Environment.NewLine);
                 Log.Logger.Information("DB seeded...");
                 Console.WriteLine(Environment.NewLine);
 
-                await repository.InsertTestData();
                 orders = await repository.GetOrdersAsync();
 
                 DebugPrintResults(orders);

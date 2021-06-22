@@ -94,5 +94,10 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
                 throw;
             }
         }
+
+        internal void ExecuteDbFunction(string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

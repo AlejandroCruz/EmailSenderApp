@@ -28,7 +28,7 @@ namespace EmailSenderApp.DataInfrastructure
             modelBuilder.Entity<Order>().HasKey(o => o.ID);
             modelBuilder.Entity<Order>().Property(o => o.OrderNumber).IsRequired().HasColumnType("nvarchar(100)");
             modelBuilder.Entity<Order>().Property(o => o.DocumentNumber).IsRequired().HasColumnType("nvarchar(100)");
-            modelBuilder.Entity<Order>().Property(o => o.PayTransNumber).HasColumnType("nvarchar(100)");
+            modelBuilder.Entity<Order>().Property(o => o.PayTransNumber).IsRequired().HasColumnType("nvarchar(100)");
             modelBuilder.Entity<Order>().Property(o => o.OrderAmount).IsRequired().HasColumnType("decimal(8,2)"); // 123,456.78
             modelBuilder.Entity<Order>().Property(o => o.OrderTax).HasColumnType("decimal(6,3)"); // 123.456
             modelBuilder.Entity<Order>().Property(o => o.StateCode).IsRequired().HasColumnType("nchar(2)");
