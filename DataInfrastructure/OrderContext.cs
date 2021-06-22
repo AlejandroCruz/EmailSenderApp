@@ -26,18 +26,23 @@ namespace EmailSenderApp.DataInfrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Order>().HasKey(o => o.ID);
-            modelBuilder.Entity<Order>().Property(o => o.OrderNumber).IsRequired();
-            modelBuilder.Entity<Order>().Property(o => o.DocumentNumber).IsRequired();
-            modelBuilder.Entity<Order>().Property(o => o.TransNumber).IsRequired();
-            modelBuilder.Entity<Order>().Property(o => o.OrderAmount).IsRequired().HasColumnType("decimal(10,3)");
-            modelBuilder.Entity<Order>().Property(o => o.OrderTax).HasColumnType("decimal(7,3)");
-            modelBuilder.Entity<Order>().Property(o => o.StateCode).IsRequired().HasMaxLength(2);
-            modelBuilder.Entity<Order>().Property(o => o.CreatedDate).HasColumnType("datetime2").HasDefaultValueSql("CURRENT_TIMESTAMP");
-            modelBuilder.Entity<Order>().Property(o => o.OrderRequestDate).IsRequired();
-            modelBuilder.Entity<Order>().Property(o => o.OrderStarttime).IsRequired();
-            modelBuilder.Entity<Order>().Property(o => o.OrderEndtime).IsRequired();
-            modelBuilder.Entity<Order>().Property(o => o.UserName).IsRequired();
-            modelBuilder.Entity<Order>().Property(o => o.UserEmail).IsRequired();
+            modelBuilder.Entity<Order>().Property(o => o.OrderNumber).IsRequired().HasColumnType("nvarchar(100)");
+            modelBuilder.Entity<Order>().Property(o => o.DocumentNumber).IsRequired().HasColumnType("nvarchar(100)");
+            modelBuilder.Entity<Order>().Property(o => o.PayTransNumber).HasColumnType("nvarchar(100)");
+            modelBuilder.Entity<Order>().Property(o => o.OrderAmount).IsRequired().HasColumnType("decimal(8,2)"); // 123,456.78
+            modelBuilder.Entity<Order>().Property(o => o.OrderTax).HasColumnType("decimal(6,3)"); // 123.456
+            modelBuilder.Entity<Order>().Property(o => o.StateCode).IsRequired().HasColumnType("nchar(2)");
+            modelBuilder.Entity<Order>().Property(o => o.FreightCode).IsRequired().HasColumnType("nchar(1)");
+            modelBuilder.Entity<Order>().Property(o => o.TransMessage).HasColumnType("nvarchar(max)");
+            modelBuilder.Entity<Order>().Property(o => o.CreatedDate).HasColumnType("datetime2(2)").HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Order>().Property(o => o.DateModified).HasColumnType("datetime2(2)");
+            modelBuilder.Entity<Order>().Property(o => o.OrderDate).IsRequired().HasColumnType("date");
+            modelBuilder.Entity<Order>().Property(o => o.FreightDate).IsRequired().HasColumnType("date");
+            modelBuilder.Entity<Order>().Property(o => o.FreightStarttime).IsRequired().HasColumnType("time(3)");
+            modelBuilder.Entity<Order>().Property(o => o.FreightEndtime).IsRequired().HasColumnType("time(3)");
+            modelBuilder.Entity<Order>().Property(o => o.UserName).IsRequired().HasColumnType("nvarchar(100)");
+            modelBuilder.Entity<Order>().Property(o => o.UserEmail).IsRequired().HasColumnType("nvarchar(max)");
+            modelBuilder.Entity<Order>().Property(o => o.PickupName).IsRequired().HasColumnType("nvarchar(100)");
         }
     }
 }

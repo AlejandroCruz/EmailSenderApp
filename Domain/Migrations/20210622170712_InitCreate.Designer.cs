@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmailSenderApp.Domain.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20210622011324_InitCreate")]
+    [Migration("20210622170712_InitCreate")]
     partial class InitCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,21 +30,31 @@ namespace EmailSenderApp.Domain.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
+                        .HasColumnType("datetime2(2)")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2(2)");
 
                     b.Property<string>("DocumentNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool?>("Error")
                         .HasColumnType("bit");
 
                     b.Property<string>("FreightCode")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nchar(1)");
+
+                    b.Property<DateTime>("FreightDate")
+                        .HasColumnType("date");
+
+                    b.Property<TimeSpan>("FreightEndtime")
+                        .HasColumnType("time(3)");
+
+                    b.Property<TimeSpan>("FreightStarttime")
+                        .HasColumnType("time(3)");
 
                     b.Property<bool?>("IsApproved")
                         .HasColumnType("bit");
@@ -53,40 +63,30 @@ namespace EmailSenderApp.Domain.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal>("OrderAmount")
-                        .HasColumnType("decimal(10,3)");
+                        .HasColumnType("decimal(8,2)");
 
-                    b.Property<DateTime?>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("OrderEndtime")
-                        .HasColumnType("datetime2");
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("OrderNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("OrderRequestDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("OrderStarttime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal?>("OrderTax")
-                        .HasColumnType("decimal(7,3)");
+                        .HasColumnType("decimal(6,3)");
+
+                    b.Property<string>("PayTransNumber")
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PickupName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("StateCode")
                         .IsRequired()
-                        .HasMaxLength(2)
-                        .HasColumnType("nvarchar(2)");
+                        .HasColumnType("nchar(2)");
 
                     b.Property<string>("TransMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TransNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserEmail")
@@ -95,7 +95,7 @@ namespace EmailSenderApp.Domain.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ID");
 

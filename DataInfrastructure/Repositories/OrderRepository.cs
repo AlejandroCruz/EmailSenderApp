@@ -40,47 +40,45 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
                 {
                     new Order
                     {
-                        OrderNumber = "101",
-                        TransNumber = "1A",
-                        DocumentNumber = "101-A",
+                        OrderNumber = "1001",
+                        DocumentNumber = "1001-A",
                         OrderAmount = 1.99M,
+                        StateCode = "PR",
                         OrderDate = DateTime.Parse("6/5/2021"),
-                        OrderRequestDate = DateTime.Parse("6/10/2021 12:00:00 AM"),
-                        OrderStarttime = DateTime.Parse("6/10/2021 8:00:00 AM"),
-                        OrderEndtime = DateTime.Parse("6/10/2021 11:00:00 AM"),
+                        FreightDate = DateTime.Parse("6/6/2021"),
+                        FreightStarttime = TimeSpan.Parse("8:00"),
+                        FreightEndtime = TimeSpan.Parse("11:00"),
                         UserName = "Bilko Bellington",
                         UserEmail = "mail@mail",
-                        PickupName = "Polar Bear",
-                        StateCode = "PR"
+                        PickupName = "Polar Bear"
                     },
                     new Order
                     {
-                        OrderNumber = "101",
-                        TransNumber = "2A",
-                        DocumentNumber = "101-B",
+                        OrderNumber = "1001",
+                        DocumentNumber = "1001-B",
                         OrderAmount = 10M,
-                        OrderDate = DateTime.Parse("6/5/2021 9:00:00 AM"),
-                        OrderRequestDate = DateTime.Parse("6/10/2021 12:00:00 AM"),
-                        OrderStarttime = DateTime.Parse("6/10/2021 8:00:00 AM"),
-                        OrderEndtime = DateTime.Parse("6/10/2021 11:00:00 AM"),
+                        StateCode = "PR",
+                        OrderDate = DateTime.Parse("6/5/2021"),
+                        FreightDate = DateTime.Parse("6/6/2021"),
+                        FreightStarttime = TimeSpan.Parse("11:00"),
+                        FreightEndtime = TimeSpan.Parse("13:30"),
                         UserName = "Bilko Bellington",
                         UserEmail = "mail@mail",
-                        PickupName = "Polar Bear",
-                        StateCode = "PR"
+                        PickupName = "Polar Bear"
                     },
                     new Order
                     {
-                        OrderNumber = "202",
-                        TransNumber = "1A",
-                        DocumentNumber = "101-A",
-                        OrderAmount = 15M,
-                        OrderDate = DateTime.Parse("6/1/2021 9:00:00 PM"),
-                        OrderRequestDate = DateTime.Parse("6/2/2021 12:00:00 AM"),
-                        OrderStarttime = DateTime.Parse("6/3/2021 8:00:00 PM"),
-                        OrderEndtime = DateTime.Parse("6/3/2021 11:00:00 PM"),
+                        OrderNumber = "1002",
+                        DocumentNumber = "1002-A",
+                        OrderAmount = 1000.99M,
+                        StateCode = "fl",
+                        OrderDate = DateTime.Parse("6/22/2021"),
+                        FreightDate = DateTime.Parse("6/22/2021"),
+                        FreightStarttime = TimeSpan.Parse("10:0"),
+                        FreightEndtime = TimeSpan.Parse("17:50"),
                         UserName = "Mr. Porter",
                         UserEmail = "mporter@mail",
-                        StateCode = "FL"
+                        PickupName = "Mr. Porter"
                     }
                 };
                 foreach (Order order in orders)
