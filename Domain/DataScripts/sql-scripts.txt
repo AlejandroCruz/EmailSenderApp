@@ -153,11 +153,8 @@ GO
 INSERT INTO [dbo].[BusinessOrder]
            ([OrderNumber]
            ,[DocumentNumber]
-           ,[TransNumber]
            ,[Amount]
-           ,[Tax]
            ,[State]
-           ,[IsApproved]
            ,[FreightCode]
            ,[OrderDate]
            ,[FreightDate]
@@ -169,7 +166,7 @@ INSERT INTO [dbo].[BusinessOrder]
      VALUES
            ('1001', '1001-A', 1.99, 'PR', 'R', '6/5/2021',  '6/10/2021', '6/10/2021 8:0', '6/10/2021 13:30', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
 GO
-
--- ('1001', '1001-B', 10.00, 'PR', '6/5/2021', 'R', '6/10/2021', '6/10/2021 8:0', '6/11/2021 13:30', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
--- ('1004', '1004-A', 10.00, 'FL', '6/5/2021', 'R', '6/10/2021', '6/11/2021 8:0', '6/11/2021 13:30', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
+-- ('1001', '1001-A', 1.99, 'PR', 'R', '6/5/2021',  '6/10/2021', '6/10/2021 8:0', '6/10/2021 13:30', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
+-- ('1001', '1001-B', 10.00, 'PR', 'R', '6/5/2021', '6/10/2021', '6/10/2021 8:0', '6/11/2021 13:30', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
+-- ('1004', '1004-A', 1000.99, 'fl', 'e', '6/22/2021', '6/22/2021', '6/22/2021 10:0', '6/22/2021 17:30', 'Mr. Porter', 'mporter@mail', 'Mr. Porter')
 -- time	hh:mm:ss[.nnnnnnn]
