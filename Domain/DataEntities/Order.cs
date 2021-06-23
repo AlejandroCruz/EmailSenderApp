@@ -16,6 +16,7 @@ namespace EmailSenderApp.Domain.DataEntities
         public string StateCode { get; set; }
         public char FreightCode { get; set; }
         public bool? IsRetrieved { get; set; }
+        public bool? IsPayProcessed { get; set; }
         public bool? IsApproved { get; set; }
         public bool? Error { get; set; }
         public string TransMessage { get; set; } = null;

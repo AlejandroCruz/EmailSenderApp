@@ -57,6 +57,9 @@ namespace EmailSenderApp.Domain.Migrations
                     b.Property<bool?>("IsApproved")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsPayProcessed")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("IsRetrieved")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")

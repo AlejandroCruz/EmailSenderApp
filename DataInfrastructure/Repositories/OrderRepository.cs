@@ -14,13 +14,23 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
 
         public OrderRepository(OrderContext orderContext)
         {
-            _orderContext = orderContext;
+            _orderContext = orderContext ?? throw new ArgumentNullException(nameof(orderContext));
         }
 
         internal async Task<IEnumerable<Order>> GetOrdersAsync()
         {
             try
             {
+                List<Order> orders = await _orderContext.Orders.AsNoTracking().ToListAsync();
+
+                if (orders == null)
+                    throw new ArgumentException();
+
+                if (orders.Count < 1)
+                    Log.Information("Empty Order list.\n");
+                else
+                    Log.Information("Returning Orders.\n");
+                
                 var orderList = await _orderContext.Orders.AsNoTracking().ToListAsync();
 
                 return orderList.ToList();
@@ -28,6 +38,19 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
             catch (Exception e)
             {
                 Log.Error(e.Message);
+                throw;
+            }
+        }
+
+        internal async Task ExecuteDbFunction(string query)
+        {
+            try
+            {
+                await _orderContext.Database.ExecuteSqlInterpolatedAsync($"{query}");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
                 throw;
             }
         }
@@ -81,7 +104,7 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
                         PickupName = "Mr. Porter"
                     }
                 };
-                
+
                 foreach (Order order in orders)
                 {
                     _orderContext.Orders.Add(order);
@@ -92,19 +115,6 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
             {
                 Log.Error(ex.Message);
 
-                throw;
-            }
-        }
-
-        internal async Task ExecuteDbFunction(string query)
-        {
-            try
-            {
-                await _orderContext.Database.ExecuteSqlRawAsync(query);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
                 throw;
             }
         }

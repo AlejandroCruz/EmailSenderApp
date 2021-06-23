@@ -38,22 +38,23 @@ namespace EmailSenderApp
 
         static async Task ApplicationProcess(IHost host)
         {
-            Log.Logger.Information("Getting orders:\n");
+            Log.Information("Getting orders:");
 
             OrderRepository repository = host.Services.GetRequiredService<OrderRepository>();
             await repository.ExecuteDbFunction(_configuration["SQLFunctions:spGetSourceData"]);
 
             IEnumerable<Order> orders = await repository.GetOrdersAsync();
 
-            if (orders.Count() > 0)
+            int ordersPendingCount = orders.Where(o => o.IsPayProcessed != true).Count();
+
+            if (ordersPendingCount > 0)
             {
                 DebugPrintResults(orders);
             }
             else
             {
-                Console.WriteLine("\nNo Orders available.\n");
+                Log.Information("No Orders available.");
             }
-
         }
 
         static IHostBuilder AppConfiguration(IHostBuilder hostBuilder)
@@ -87,7 +88,6 @@ namespace EmailSenderApp
 
         static void SetLogger()
         {
-            // TODO - ACruz: How to print log levels (info/warning/error)
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(_configuration)
                 .Enrich.FromLogContext()
@@ -102,15 +102,15 @@ namespace EmailSenderApp
 
         private static void DebugPrintResults(IEnumerable<Order> orders)
         {
-            Console.WriteLine(Environment.NewLine);
-            Log.Logger.Information("Printing orders:");
+            Log.Information("Printing orders:");
 
-            foreach (Order order in orders)
+            foreach (Order order in orders.Where(o => o.IsPayProcessed != true))
             {
                 Console.WriteLine(
-                    $"{order.ID}, {order.OrderNumber}," +
-                    $" ${order.OrderAmount} " +
-                    $"- {order.OrderDate}, " +
+                    $"ID: {order.ID}, " +
+                    $"Order #: {order.OrderNumber}, " +
+                    $"Doc #: {order.DocumentNumber}, " +
+                    $"Order Date: {order.OrderDate}, " +
                     $"Date created: {order.CreatedDate}");
             }
         }

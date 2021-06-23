@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmailSenderApp.Domain.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20210622170712_InitCreate")]
+    [Migration("20210623221809_InitCreate")]
     partial class InitCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,8 +59,13 @@ namespace EmailSenderApp.Domain.Migrations
                     b.Property<bool?>("IsApproved")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsRetrieved")
+                    b.Property<bool?>("IsPayProcessed")
                         .HasColumnType("bit");
+
+                    b.Property<bool?>("IsRetrieved")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<decimal>("OrderAmount")
                         .HasColumnType("decimal(8,2)");
@@ -76,6 +81,7 @@ namespace EmailSenderApp.Domain.Migrations
                         .HasColumnType("decimal(6,3)");
 
                     b.Property<string>("PayTransNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PickupName")
