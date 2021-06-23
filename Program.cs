@@ -1,6 +1,7 @@
 ﻿using EmailSenderApp.DataInfrastructure;
 using EmailSenderApp.DataInfrastructure.Repositories;
 using EmailSenderApp.Domain.DataEntities;
+using EmailSenderApp.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +24,7 @@ namespace EmailSenderApp
         {
             IHostBuilder
                 hostBuilder = Host.CreateDefaultBuilder(args);
-            hostBuilder = AppConfiguration(hostBuilder);
+                hostBuilder = AppConfiguration(hostBuilder);
             IHost host = AppServices(hostBuilder);
 
             SetLogger();
@@ -31,6 +32,8 @@ namespace EmailSenderApp
             await ApplicationProcess(host);
 
             //DisposeResources();
+
+            Log.CloseAndFlush();
         }
 
         static async Task ApplicationProcess(IHost host)
@@ -38,6 +41,8 @@ namespace EmailSenderApp
             Log.Logger.Information("Getting orders:\n");
 
             OrderRepository repository = host.Services.GetRequiredService<OrderRepository>();
+            await repository.ExecuteDbFunction(_configuration["SQLFunctions:spGetSourceData"]);
+
             IEnumerable<Order> orders = await repository.GetOrdersAsync();
 
             if (orders.Count() > 0)
@@ -46,14 +51,7 @@ namespace EmailSenderApp
             }
             else
             {
-                Console.WriteLine(Environment.NewLine);
-                Log.Logger.Information("DB seeded...");
-                Console.WriteLine(Environment.NewLine);
-
-                await repository.InsertTestData();
-                orders = await repository.GetOrdersAsync();
-
-                DebugPrintResults(orders);
+                Console.WriteLine("\nNo Orders available.\n");
             }
 
         }
@@ -77,9 +75,11 @@ namespace EmailSenderApp
         {
             hostBuilder.ConfigureServices(services =>
             {
-                services.AddDbContext<OrderContext>(options =>
-                    options.UseSqlServer( _configuration.GetConnectionString("Default") ));
-                services.AddScoped<OrderRepository>();
+                services
+                    .AddOrdersContext(_configuration.GetConnectionString("Default"))
+                    .AddRepositories();
+                    //.AddEmailProcess()
+                    //.AddEmailBuilder();
             });
 
             return hostBuilder.Build();
