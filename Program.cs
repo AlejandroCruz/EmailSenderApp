@@ -24,7 +24,7 @@ namespace EmailSenderApp
         {
             IHostBuilder
                 hostBuilder = Host.CreateDefaultBuilder(args);
-            hostBuilder = AppConfiguration(hostBuilder);
+                hostBuilder = AppConfiguration(hostBuilder);
             IHost host = AppServices(hostBuilder);
 
             SetLogger();
@@ -32,6 +32,8 @@ namespace EmailSenderApp
             await ApplicationProcess(host);
 
             //DisposeResources();
+
+            Log.CloseAndFlush();
         }
 
         static async Task ApplicationProcess(IHost host)
@@ -49,15 +51,7 @@ namespace EmailSenderApp
             }
             else
             {
-                await repository.InsertTestData();
-
-                Console.WriteLine(Environment.NewLine);
-                Log.Logger.Information("DB seeded...");
-                Console.WriteLine(Environment.NewLine);
-
-                orders = await repository.GetOrdersAsync();
-
-                DebugPrintResults(orders);
+                Console.WriteLine("\nNo Orders available.\n");
             }
 
         }
