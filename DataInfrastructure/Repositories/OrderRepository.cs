@@ -81,6 +81,7 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
                         PickupName = "Mr. Porter"
                     }
                 };
+                
                 foreach (Order order in orders)
                 {
                     _orderContext.Orders.Add(order);
@@ -95,9 +96,17 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
             }
         }
 
-        internal void ExecuteDbFunction(string v)
+        internal async Task ExecuteDbFunction(string query)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _orderContext.Database.ExecuteSqlRawAsync(query);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                throw;
+            }
         }
     }
 }

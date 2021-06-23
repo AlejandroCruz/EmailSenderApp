@@ -39,7 +39,7 @@ namespace EmailSenderApp
             Log.Logger.Information("Getting orders:\n");
 
             OrderRepository repository = host.Services.GetRequiredService<OrderRepository>();
-            repository.ExecuteDbFunction(_configuration["SQLFunctions:spGetSourceData"]);
+            await repository.ExecuteDbFunction(_configuration["SQLFunctions:spGetSourceData"]);
 
             IEnumerable<Order> orders = await repository.GetOrdersAsync();
 

@@ -138,10 +138,10 @@ GO
 -- time	hh:mm:ss[.nnnnnnn]
 
 --# CREATE PROCEDURE [dbo].[spEmailSenderApp_GetSourceData]
-DROP PROCEDURE [dbo].[spEmailSenderApp_GetSourceData]
+DROP PROCEDURE IF EXISTS [dbo].[spEmailSenderApp_GetSourceData]
 GO
 --
--- Author:		Alejandro Cruz
+-- Author:		A Cruz
 -- Create date: 6/22/2021
 -- Description:	Get source data
 --
@@ -159,10 +159,58 @@ SET @r = (
 
 IF @r > 0
 BEGIN TRANSACTION;
-USE DefaultDevelopment;
 SET NOCOUNT ON;
-INSERT INTO dbo.Orders
-		()
+	INSERT INTO dbo.Orders
+		([OrderNumber]
+		,[DocumentNumber]
+		,[PayTransNumber]
+		,[OrderAmount]
+		,[OrderTax]
+		,[StateCode]
+		,[FreightCode]
+		,[IsApproved]
+		,[OrderDate]
+		,[FreightDate]
+		,[FreightStarttime]
+		,[FreightEndtime]
+		,[UserName]
+		,[UserEmail]
+		,[PickupName])
 	SELECT
-		FROM dbo.BusinessOrder AS BO
-		WHERE
+		 BO.[OrderNumber]
+		,BO.[DocumentNumber]
+		,BO.[PayTransNumber]
+		,BO.[Amount]
+		,BO.[Tax]
+		,BO.[State]
+		,BO.[FreightCode]
+		,BO.[IsApproved]
+		,BO.[OrderDate]
+		,BO.[FreightDate]
+		,BO.[FreightStarttime]
+		,BO.[FreightEndtime]
+		,BO.[UserName]
+		,BO.[UserEmail]
+		,BO.[PickupName]
+	FROM dbo.BusinessOrder AS BO
+	WHERE BO.IsRetrieved IS NULL
+	OR LTRIM(BO.IsRetrieved) = ''
+	OR LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = '0'
+	OR LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'n'
+	OR LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'no';
+COMMIT;
+GO
+
+/*
+CASE
+	WHEN BO.IsRetrieved IS NULL THEN 0
+	WHEN LTRIM(BO.IsRetrieved) = '' THEN 0
+	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = '0' THEN 0
+	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'n' THEN 0
+	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'no' THEN 0
+	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = '1' THEN 1
+	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'y' THEN 1
+	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'yes' THEN 1
+	ELSE NULL
+END
+*/

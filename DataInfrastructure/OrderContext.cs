@@ -32,6 +32,7 @@ namespace EmailSenderApp.DataInfrastructure
             modelBuilder.Entity<Order>().Property(o => o.OrderAmount).IsRequired().HasColumnType("decimal(8,2)"); // 123,456.78
             modelBuilder.Entity<Order>().Property(o => o.OrderTax).HasColumnType("decimal(6,3)"); // 123.456
             modelBuilder.Entity<Order>().Property(o => o.StateCode).IsRequired().HasColumnType("nchar(2)");
+            modelBuilder.Entity<Order>().Property(o => o.IsRetrieved).HasDefaultValue(true);
             modelBuilder.Entity<Order>().Property(o => o.FreightCode).IsRequired().HasColumnType("nchar(1)");
             modelBuilder.Entity<Order>().Property(o => o.TransMessage).HasColumnType("nvarchar(max)");
             modelBuilder.Entity<Order>().Property(o => o.CreatedDate).HasColumnType("datetime2(2)").HasDefaultValueSql("CURRENT_TIMESTAMP");
