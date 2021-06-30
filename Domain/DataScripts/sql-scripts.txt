@@ -165,7 +165,7 @@ BEGIN
 	AND O.ID IN (
 		SELECT MAX(OrderNumber_MaxID.ID)
 		FROM dbo.Orders AS OrderNumber_MaxID
-		GROUP BY OrderNumber_MaxID.OrderNumber
+		GROUP BY OrderNumber_MaxID.DocumentNumber
 	);
 END;
 GO
