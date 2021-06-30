@@ -1,10 +1,4 @@
 ﻿--# CREATE TABLE [DefaultDevelopment].[dbo].[Orders]
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 CREATE TABLE [dbo].[Orders](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
 	[OrderNumber] [nvarchar](100) NOT NULL,
@@ -32,10 +26,6 @@ CREATE TABLE [dbo].[Orders](
 	[ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-
-ALTER TABLE [dbo].[Orders] ADD  DEFAULT (getdate()) FOR [CreatedDate]
-GO
 
 --# INSERT INTO [DefaultDevelopment].[dbo].[Orders]
 INSERT INTO [dbo].[Orders]
@@ -66,26 +56,6 @@ GO
 -- ('202','1A','101-A',15.00,'6/1/2021 9:00:00 PM','6/2/2021 12:00:00','6/3/2021 8:00:00 PM','6/3/2021 11:00:00 PM','Mr. Porter','mporter@mail','FL')
 
 --# CREATE TABLE [BusinessDatabase].dbo.BusinessOrder
- /*
-   Monday, June 21, 20216:33:10 PM
-   User: ACruz
-   Server: DEV1
-   Database: BusinessDatabase
-   Application: EmailSenderApp
-*/
-
-/* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
-BEGIN TRANSACTION
-SET QUOTED_IDENTIFIER ON
-SET ARITHABORT ON
-SET NUMERIC_ROUNDABORT OFF
-SET CONCAT_NULL_YIELDS_NULL ON
-SET ANSI_NULLS ON
-SET ANSI_PADDING ON
-SET ANSI_WARNINGS ON
-COMMIT
-BEGIN TRANSACTION
-GO
 CREATE TABLE [dbo].[BusinessOrder](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[OrderNumber] [nvarchar](50) NOT NULL,
@@ -105,15 +75,8 @@ CREATE TABLE [dbo].[BusinessOrder](
 	[UserEmail] [nvarchar](100) NOT NULL,
 	[PickupName] [nvarchar](50) NULL
 ) ON [PRIMARY]
-GO
-ALTER TABLE dbo.BusinessOrder SET (LOCK_ESCALATION = TABLE)
-GO
-COMMIT
 
 --# INSERT INTO [BusinessDatabase].[dbo].[BusinessOrder]
-USE [BusinessDatabase]
-GO
-
 INSERT INTO [dbo].[BusinessOrder]
            ([OrderNumber]
            ,[DocumentNumber]
@@ -150,16 +113,10 @@ AS
 DECLARE @r INT = 0;
 SET @r = (
 	SELECT COUNT(*)
-	FROM  dbo.BusinessOrder AS B
-	WHERE B.IsRetrieved IS NULL
-	OR LTRIM(B.IsRetrieved) = ''
-	OR LOWER(LTRIM( RTRIM(B.IsRetrieved) )) = '0'
-	OR LOWER(LTRIM( RTRIM(B.IsRetrieved) )) = 'n'
-	OR LOWER(LTRIM( RTRIM(B.IsRetrieved) )) = 'no');
-
+	FROM  dbo.vOrdersNotRetrieved);
 IF @r > 0
-BEGIN TRANSACTION;
 SET NOCOUNT ON;
+BEGIN
 	INSERT INTO dbo.Orders
 		([OrderNumber]
 		,[DocumentNumber]
@@ -177,40 +134,54 @@ SET NOCOUNT ON;
 		,[UserEmail]
 		,[PickupName])
 	SELECT
-		 BO.[OrderNumber]
-		,BO.[DocumentNumber]
-		,BO.[PayTransNumber]
-		,BO.[Amount]
-		,BO.[Tax]
-		,BO.[State]
-		,BO.[FreightCode]
-		,BO.[IsApproved]
-		,BO.[OrderDate]
-		,BO.[FreightDate]
-		,BO.[FreightStarttime]
-		,BO.[FreightEndtime]
-		,BO.[UserName]
-		,BO.[UserEmail]
-		,BO.[PickupName]
-	FROM dbo.BusinessOrder AS BO
-	WHERE BO.IsRetrieved IS NULL
-	OR LTRIM(BO.IsRetrieved) = ''
-	OR LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = '0'
-	OR LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'n'
-	OR LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'no';
-COMMIT;
+		 B.[OrderNumber]
+		,B.[DocumentNumber]
+		,B.[PayTransNumber]
+		,B.[Amount]
+		,B.[Tax]
+		,B.[State]
+		,B.[FreightCode]
+		,B.[IsApproved]
+		,B.[OrderDate]
+		,B.[FreightDate]
+		,B.[FreightStarttime]
+		,B.[FreightEndtime]
+		,B.[UserName]
+		,B.[UserEmail]
+		,B.[PickupName]
+	FROM (
+		SELECT *
+		FROM  dbo.vOrdersNotRetrieved
+	)AS B;
+END;
+BEGIN
+	UPDATE dbo.BusinessOrder
+	SET IsRetrieved = 'yes'
+	FROM BusinessOrder AS BO
+		JOIN dbo.Orders AS O
+		ON BO.DocumentNumber = O.DocumentNumber
+	WHERE O.IsPayProcessed <> 1
+	OR  O.IsPayProcessed IS NULL
+	AND O.ID IN (
+		SELECT MAX(OrderNumber_MaxID.ID)
+		FROM dbo.Orders AS OrderNumber_MaxID
+		GROUP BY OrderNumber_MaxID.OrderNumber
+	);
+END;
 GO
 
-/*
-CASE
-	WHEN BO.IsRetrieved IS NULL THEN 0
-	WHEN LTRIM(BO.IsRetrieved) = '' THEN 0
-	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = '0' THEN 0
-	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'n' THEN 0
-	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'no' THEN 0
-	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = '1' THEN 1
-	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'y' THEN 1
-	WHEN LOWER(LTRIM( RTRIM(BO.IsRetrieved) )) = 'yes' THEN 1
-	ELSE NULL
-END
-*/
+--# CREATE VIEW [dbo].[vOrdersNotRetrieved]
+CREATE VIEW [dbo].[vOrdersNotRetrieved]
+AS
+WITH OrdersNotRetrieved AS
+(
+	SELECT *
+	FROM  dbo.BusinessOrder AS B
+	WHERE B.IsRetrieved IS NULL
+	OR LTRIM(B.IsRetrieved) = ''
+	OR LOWER(LTRIM( RTRIM(B.IsRetrieved) )) = '0'
+	OR LOWER(LTRIM( RTRIM(B.IsRetrieved) )) = 'n'
+	OR LOWER(LTRIM( RTRIM(B.IsRetrieved) )) = 'no'
+)
+SELECT * FROM OrdersNotRetrieved;
+GO

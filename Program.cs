@@ -49,7 +49,10 @@ namespace EmailSenderApp
 
             if (ordersPendingCount > 0)
             {
+                // --> DEBUG
                 DebugPrintResults(orders);
+                // DEBUG <--
+
             }
             else
             {
