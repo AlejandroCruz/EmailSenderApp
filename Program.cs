@@ -1,5 +1,4 @@
-﻿using EmailSenderApp.DataInfrastructure;
-using EmailSenderApp.DataInfrastructure.Repositories;
+﻿using EmailSenderApp.DataInfrastructure.Repositories;
 using EmailSenderApp.Domain.DataEntities;
 using EmailSenderApp.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +9,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EmailSenderApp
@@ -24,7 +24,7 @@ namespace EmailSenderApp
         {
             IHostBuilder
                 hostBuilder = Host.CreateDefaultBuilder(args);
-                hostBuilder = AppConfiguration(hostBuilder);
+            hostBuilder = AppConfiguration(hostBuilder);
             IHost host = AppServices(hostBuilder);
 
             SetLogger();
@@ -49,10 +49,20 @@ namespace EmailSenderApp
 
             if (ordersPendingCount > 0)
             {
+                App.Clients.StateTaxCalculator taxCalculator = host.Services.GetRequiredService<App.Clients.StateTaxCalculator>();
+
                 // --> DEBUG
                 DebugPrintResults(orders);
                 // DEBUG <--
 
+                foreach (Order pendingOrder in orders)
+                {
+                    Order orderResponse = await taxCalculator.StateTaxCalculateAsync(pendingOrder, CancellationToken.None);
+
+                    await repository.UpdateOrderAsync(orderResponse);
+                }
+
+                // TODO: Execute DB function "ReturnData"
             }
             else
             {
@@ -67,7 +77,7 @@ namespace EmailSenderApp
             return hostBuilder.ConfigureHostConfiguration(configHost =>
             {
                 configHost.Sources.Clear();
-                
+
                 _configuration = configHost.AddJsonFile($"{CONFIG_FILE}.json", optional: false, reloadOnChange: true)
                    .AddJsonFile($"{CONFIG_FILE}.{environment.ToString() ?? "Production"}.json", optional: true)
                    //.AddUserSecrets<Program>()
@@ -81,9 +91,10 @@ namespace EmailSenderApp
             {
                 services
                     .AddOrdersContext(_configuration.GetConnectionString("Default"))
+                    .AddStateTaxCalculator(_configuration.GetValue<string>("BaseUrl"))
                     .AddRepositories();
-                    //.AddEmailProcess()
-                    //.AddEmailBuilder();
+                //.AddEmailProcess()
+                //.AddEmailBuilder();
             });
 
             return hostBuilder.Build();

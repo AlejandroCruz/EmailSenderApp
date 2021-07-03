@@ -30,7 +30,7 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
                     Log.Information("Empty Order list.\n");
                 else
                     Log.Information("Returning Orders.\n");
-                
+
                 var orderList = await _orderContext.Orders.AsNoTracking().ToListAsync();
 
                 return orderList.ToList();
@@ -117,6 +117,11 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
 
                 throw;
             }
+        }
+
+        internal Task UpdateOrderAsync(Order orderResponse)
+        {
+            throw new NotImplementedException();
         }
     }
 }
