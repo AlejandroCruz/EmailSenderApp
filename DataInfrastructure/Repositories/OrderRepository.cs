@@ -123,33 +123,20 @@ namespace OrderTaxProcessor.DataInfrastructure.Repositories
             }
         }
 
-        public bool UpdateOrderAsync(Order orderResponse)
+        public async Task UpdateOrderAsync(Order orderResponse)
         {
-            // --> DEBUG
-            bool tested;
-
             try
             {
-                var tmp = Type.GetType("OrderTaxProcessor.Domain.DataEntities.Order");
+                if (orderResponse == null) throw new ArgumentNullException();
 
-                PropertyInfo[] tmp_orderProps = tmp.GetProperties();
-
-                foreach (PropertyInfo prop in tmp_orderProps)
-                {
-                    Console.WriteLine($"\n---> DEBUG\n{prop.ToString()}\n<-- DEBUG\n");
-                }
-
-                tested = true;
-            // DEBUG <--
-
+                Log.Information("Updating Order.");
+                _orderContext.Attach(orderResponse).State = EntityState.Modified;
+                await _orderContext.SaveChangesAsync();
             }
             catch (Exception)
             {
-
                 throw;
             }
-
-            return tested;
         }
     }
 }

@@ -59,7 +59,7 @@ namespace OrderTaxProcessor
                 {
                     Order orderResponse = await taxCalculator.StateTaxCalculateAsync(pendingOrder, CancellationToken.None);
 
-                    //await repository.UpdateOrderAsync(orderResponse);
+                    await repository.UpdateOrderAsync(orderResponse);
                 }
 
                 // TODO: Execute DB function "ReturnData"

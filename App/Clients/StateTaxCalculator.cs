@@ -34,7 +34,7 @@ namespace OrderTaxProcessor.App.Clients
             {
                 MapToDto(pendingOrder);
 
-                Uri uri = new UriBuilder($"{_httpClient.BaseAddress.ToString()}api/states/tax").Uri;
+                Uri uri = new UriBuilder($"{_httpClient.BaseAddress.ToString()}api/states/tax").Uri; // TODO: API project with this endoint ([Porject].API.Controllers.TokensController.AuthorizeTokenTransaction())
                 HttpRequestMessage requestMessage = BuildHttpRequest(_requestDto, HttpMethod.Post, uri);
                 _responseDto = await SendRequestAsync<ResponseDto>(requestMessage, cancellationToken);
 
@@ -50,9 +50,9 @@ namespace OrderTaxProcessor.App.Clients
 
                 return order;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Log.Information($"Request API error: {ex}");
                 throw;
             }
         }

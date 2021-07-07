@@ -8,8 +8,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="DataInfrastructure\EmailService\**" />
 	  <Compile Remove="Domain\Services\**" />
+	  <EmbeddedResource Remove="DataInfrastructure\EmailService\**" />
 	  <EmbeddedResource Remove="Domain\Services\**" />
+	  <None Remove="DataInfrastructure\EmailService\**" />
 	  <None Remove="Domain\Services\**" />
 	</ItemGroup>
 
@@ -45,7 +48,6 @@
 
 	<ItemGroup>
 		<Folder Include="App\Services\" />
-		<Folder Include="DataInfrastructure\EmailService\" />
 	</ItemGroup>
 
 	<ProjectExtensions>
