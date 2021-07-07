@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace EmailSenderApp.Domain.Migrations
+namespace OrderTaxProcessor.Domain.Migrations
 {
     public partial class InitCreate : Migration
     {

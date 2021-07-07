@@ -1,5 +1,5 @@
-﻿using EmailSenderApp.App.DTOs;
-using EmailSenderApp.Domain.DataEntities;
+﻿using OrderTaxProcessor.App.DTOs;
+using OrderTaxProcessor.Domain.DataEntities;
 using Newtonsoft.Json;
 using Serilog;
 using System;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EmailSenderApp.App.Clients
+namespace OrderTaxProcessor.App.Clients
 {
     internal interface IStateTaxCalculator
     {

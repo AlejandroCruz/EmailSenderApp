@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "EmailSenderApp": {
+    "OrderTaxProcessor": {
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"

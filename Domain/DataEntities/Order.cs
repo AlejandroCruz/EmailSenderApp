@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EmailSenderApp.Domain.DataEntities
+namespace OrderTaxProcessor.Domain.DataEntities
 {
     [Table("Orders")]
     public class Order

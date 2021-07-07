@@ -1,4 +1,4 @@
-﻿namespace EmailSenderApp.App.DTOs
+﻿namespace OrderTaxProcessor.App.DTOs
 {
     class ResponseDto
     {

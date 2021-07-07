@@ -1,11 +1,11 @@
-﻿using EmailSenderApp.App.Clients;
-using EmailSenderApp.DataInfrastructure;
-using EmailSenderApp.DataInfrastructure.Repositories;
+﻿using OrderTaxProcessor.App.Clients;
+using OrderTaxProcessor.DataInfrastructure;
+using OrderTaxProcessor.DataInfrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace EmailSenderApp.Domain.Extensions
+namespace OrderTaxProcessor.Domain.Extensions
 {
     public static class Extensions
     {

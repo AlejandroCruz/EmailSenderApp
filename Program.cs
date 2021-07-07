@@ -1,6 +1,6 @@
-﻿using EmailSenderApp.DataInfrastructure.Repositories;
-using EmailSenderApp.Domain.DataEntities;
-using EmailSenderApp.Domain.Extensions;
+﻿using OrderTaxProcessor.DataInfrastructure.Repositories;
+using OrderTaxProcessor.Domain.DataEntities;
+using OrderTaxProcessor.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EmailSenderApp
+namespace OrderTaxProcessor
 {
     class Program
     {
@@ -59,7 +59,7 @@ namespace EmailSenderApp
                 {
                     Order orderResponse = await taxCalculator.StateTaxCalculateAsync(pendingOrder, CancellationToken.None);
 
-                    await repository.UpdateOrderAsync(orderResponse);
+                    //await repository.UpdateOrderAsync(orderResponse);
                 }
 
                 // TODO: Execute DB function "ReturnData"

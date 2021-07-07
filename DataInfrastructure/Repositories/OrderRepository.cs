@@ -1,16 +1,20 @@
-﻿using EmailSenderApp.Domain.DataEntities;
+﻿using OrderTaxProcessor.Domain.DataEntities;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
-namespace EmailSenderApp.DataInfrastructure.Repositories
+namespace OrderTaxProcessor.DataInfrastructure.Repositories
 {
     public class OrderRepository
     {
         OrderContext _orderContext;
+
+        public OrderRepository()
+        { } // Unit Test
 
         public OrderRepository(OrderContext orderContext)
         {
@@ -119,9 +123,33 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
             }
         }
 
-        internal Task UpdateOrderAsync(Order orderResponse)
+        public bool UpdateOrderAsync(Order orderResponse)
         {
-            throw new NotImplementedException();
+            // --> DEBUG
+            bool tested;
+
+            try
+            {
+                var tmp = Type.GetType("OrderTaxProcessor.Domain.DataEntities.Order");
+
+                PropertyInfo[] tmp_orderProps = tmp.GetProperties();
+
+                foreach (PropertyInfo prop in tmp_orderProps)
+                {
+                    Console.WriteLine($"\n---> DEBUG\n{prop.ToString()}\n<-- DEBUG\n");
+                }
+
+                tested = true;
+            // DEBUG <--
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return tested;
         }
     }
 }

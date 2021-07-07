@@ -1,8 +1,8 @@
-﻿using EmailSenderApp.Domain.DataEntities;
+﻿using OrderTaxProcessor.Domain.DataEntities;
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace EmailSenderApp.DataInfrastructure
+namespace OrderTaxProcessor.DataInfrastructure
 {
     public class OrderContext : DbContext
     {
@@ -15,7 +15,7 @@ namespace EmailSenderApp.DataInfrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string envMIGRATION = Environment.GetEnvironmentVariable("EMAILSENDERAPP_CONNECTSTRING");
+            string envMIGRATION = Environment.GetEnvironmentVariable("ORDERTAXPROCESSOR_CONNECTSTRING");
 
             if (envMIGRATION != default)
             {

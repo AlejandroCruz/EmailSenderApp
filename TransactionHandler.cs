@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EmailSenderApp
+namespace OrderTaxProcessor
 {
     public class TransactionHandler
     {
