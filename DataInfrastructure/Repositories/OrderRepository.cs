@@ -31,9 +31,7 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
                 else
                     Log.Information("Returning Orders.\n");
 
-                var orderList = await _orderContext.Orders.AsNoTracking().ToListAsync();
-
-                return orderList.ToList();
+                return orders;
             }
             catch (Exception e)
             {

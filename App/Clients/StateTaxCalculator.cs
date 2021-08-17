@@ -63,7 +63,7 @@ namespace EmailSenderApp.App.Clients
             //pendingOrder.Error = true;
             //pendingOrder.TransMessage = message ?? responseDto.Message;
             pendingOrder.DateModified = DateTime.UtcNow;
-            pendingOrder.OrderNumber = responseDto.TransactionId;
+            pendingOrder.PayTransNumber = responseDto.TransactionId;
             pendingOrder.OrderAmount = responseDto.Amount;
 
             return pendingOrder;

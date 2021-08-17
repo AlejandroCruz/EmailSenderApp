@@ -16,7 +16,6 @@ namespace EmailSenderApp
 {
     class Program
     {
-        const string ENVIRONMENT_VAR = "DOTNET_ENVIRONMENT";
         const string CONFIG_FILE = "AppConfig/appsettings";
         static IConfiguration _configuration;
 
@@ -30,8 +29,6 @@ namespace EmailSenderApp
             SetLogger();
 
             await ApplicationProcess(host);
-
-            //DisposeResources();
 
             Log.CloseAndFlush();
         }
@@ -67,8 +64,6 @@ namespace EmailSenderApp
                 Console.WriteLine("\nAfter Tax");
                 DebugPrintResults(orders);
                 // DEBUG <--
-
-                // TODO: Execute DB function "ReturnData"
             }
             else
             {
@@ -78,7 +73,7 @@ namespace EmailSenderApp
 
         static IHostBuilder AppConfiguration(IHostBuilder hostBuilder)
         {
-            string environment = Environment.GetEnvironmentVariable(ENVIRONMENT_VAR);
+            string environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
 
             return hostBuilder.ConfigureHostConfiguration(configHost =>
             {
@@ -99,8 +94,6 @@ namespace EmailSenderApp
                     .AddOrdersContext(_configuration.GetConnectionString("Default"))
                     .AddStateTaxCalculator(_configuration.GetValue<string>("BaseUrl"))
                     .AddRepositories();
-                //.AddEmailProcess()
-                //.AddEmailBuilder();
             });
 
             return hostBuilder.Build();
@@ -113,11 +106,6 @@ namespace EmailSenderApp
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
                 .CreateLogger();
-        }
-
-        static void DisposeResources()
-        {
-            throw new NotImplementedException();
         }
 
         private static void DebugPrintResults(IEnumerable<Order> orders)

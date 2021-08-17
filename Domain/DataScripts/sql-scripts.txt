@@ -29,44 +29,6 @@ CREATE TABLE [dbo].[Orders](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
---# INSERT INTO [DefaultDevelopment].[dbo].[Orders]
-INSERT INTO [dbo].[Orders]--
-           ([OrderNumber]
-           ,[DocumentNumber]
-           ,[PayTransNumber]
-           ,[OrderAmount]
-		   ,[StateCode]
-		   ,[FreightCode]           
-           ,[CreatedDate]
-           ,[DateModified]
-           ,[OrderDate]
-           ,[FreightDate]
-           ,[FreightStarttime]
-           ,[FreightEndtime]
-           ,[UserName]
-           ,[UserEmail]
-           ,[PickupName])
-VALUES(
-'101',
-'1A',
-'101-A',
-1.99,
-'PR',
-'R',
-'20210605',
-'6/10/2021 12:00:00 AM',
-'6/10/2021 8:00:00 AM',
-'6/10/2021 11:00:00 AM',
-'6/11/2021 11:00:00 AM',
-'6/11/2021 12:00:00 PM',
-'Bilko Bellington',
-'mail@mail',
-'Polar Bear'
-)
-GO
--- ('101','2A','101-B',10.00,'6/5/2021 9:00:00 AM','6/10/2021 12:00:00','6/10/2021 8:00:00 AM','6/10/2021 11:00:00 AM','Bilko Bellington','mail@mail','Polar Bear','PR')
--- ('202','1A','101-A',15.00,'6/1/2021 9:00:00 PM','6/2/2021 12:00:00','6/3/2021 8:00:00 PM','6/3/2021 11:00:00 PM','Mr. Porter','mporter@mail','FL')
-
 --# CREATE TABLE [BusinessDatabase].dbo.BusinessOrder
 CREATE TABLE [dbo].[BusinessOrder](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
@@ -121,9 +83,9 @@ INSERT INTO [dbo].[BusinessOrder]
 			'Polar Bear'
 )
 GO
--- ('1001', '1001-A', ' 0987654321 ', 1.99, 'PR', 'R', '6/5/2021',  '6/10/2021', '0800', '1000', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
--- ('1001', '1001-B', ' 0987654312 ', 10.00, 'PR', 'R', '6/5/2021', '6/10/2021', '1100', '1330', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
--- ('1004', '1004-A', ' 0987654123 ', 1000.99, 'fl', 'e', '6/22/2021', '6/22/2021', '1000', '1730', 'Mr. Porter', 'mporter@mail', 'Mr. Porter')
+-- ('1001', '1001-A', ' 0987654321 ', 1.99, 'PR', 'R', '', '6/5/2021',  '6/10/2021', '0800', '1000', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
+-- ('1001', '1001-B', ' 0987654312 ', 10.00, 'PR', 'R', '', '6/5/2021', '6/10/2021', '1100', '1330', 'Bilko Bellington', 'mail@mail', 'Polar Bear')
+-- ('1004', '1004-A', ' 0987654123 ', 1000.99, 'fl', 'e', '', '6/22/2021', '6/22/2021', '1000', '1730', 'Mr. Porter', 'mporter@mail', 'Mr. Porter')
 -- time	hh:mm:ss[.nnnnnnn]
 
 --# CREATE PROCEDURE [dbo].[spEmailSenderApp_GetSourceData]
