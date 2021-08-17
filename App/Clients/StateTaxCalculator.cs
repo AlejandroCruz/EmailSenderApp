@@ -34,7 +34,7 @@ namespace EmailSenderApp.App.Clients
             {
                 MapToDto(pendingOrder);
 
-                Uri uri = new UriBuilder($"{_httpClient.BaseAddress.ToString()}api/statetax").Uri;
+                Uri uri = new UriBuilder("https://localhost:44306/api/StateTax/addtax").Uri;
                 HttpRequestMessage requestMessage = BuildHttpRequest(_requestDto, HttpMethod.Post, uri);
                 _responseDto = await SendRequestAsync<ResponseDto>(requestMessage, cancellationToken);
 
@@ -44,24 +44,27 @@ namespace EmailSenderApp.App.Clients
                     return MapToOrder(new ResponseDto { TransactionId = _responseDto.TransactionId }, pendingOrder, "API request error.");
                 }
 
+                Console.WriteLine(Environment.NewLine);
                 Log.Information($"Order: {_requestDto.TransactionId}, API request success.");
 
                 Order order = MapToOrder(_responseDto, pendingOrder);
 
                 return order;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Log.Error(ex.Message);
                 throw;
             }
         }
 
         private Order MapToOrder(ResponseDto responseDto, Order pendingOrder, string message = null)
         {
-            pendingOrder.Error = true;
-            pendingOrder.TransMessage = message ?? responseDto.Message;
+            //pendingOrder.Error = true;
+            //pendingOrder.TransMessage = message ?? responseDto.Message;
             pendingOrder.DateModified = DateTime.UtcNow;
+            pendingOrder.OrderNumber = responseDto.TransactionId;
+            pendingOrder.OrderAmount = responseDto.Amount;
 
             return pendingOrder;
         }

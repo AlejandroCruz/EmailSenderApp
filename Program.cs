@@ -58,15 +58,13 @@ namespace EmailSenderApp
 
                 foreach (Order pendingOrder in orders)
                 {
-                    decimal taxAmount = 10;
-                    pendingOrder.OrderAmount += taxAmount;
-                    //Order orderResponse = await taxCalculator.StateTaxCalculateAsync(pendingOrder, CancellationToken.None);
+                    Order orderResponse = await taxCalculator.StateTaxCalculateAsync(pendingOrder, CancellationToken.None);
 
                     await repository.UpdateOrderAsync(pendingOrder);
                 }
 
                 // --> DEBUG
-                Console.WriteLine("After Tax");
+                Console.WriteLine("\nAfter Tax");
                 DebugPrintResults(orders);
                 // DEBUG <--
 

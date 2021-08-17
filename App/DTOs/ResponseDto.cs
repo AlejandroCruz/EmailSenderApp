@@ -1,10 +1,17 @@
-﻿namespace EmailSenderApp.App.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace EmailSenderApp.App.DTOs
 {
     class ResponseDto
     {
+        [JsonPropertyName("Amount")]
+        public decimal Amount { get; set; }
+
+        [JsonPropertyName("StateCode")]
+        public string StateCode { get; set; }
+
+        [JsonPropertyName("TransactionId")]
         public string TransactionId { get; set; }
-        public string Message { get; set; }
-        public decimal TaxedAmount { get; set; }
         // TODO: [...]
     }
 }
