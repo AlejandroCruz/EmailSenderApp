@@ -21,11 +21,11 @@ namespace EmailSenderApp.App.Clients
         private IRequestDto _requestDto;
         private ResponseDto _responseDto;
 
-        public StateTaxCalculator(HttpClient httpClient, RequestDto requestDto, ResponseDto responseDto)
+        public StateTaxCalculator(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _requestDto = requestDto;
-            _responseDto = responseDto;
+            _requestDto = new RequestDto();
+            _responseDto = new ResponseDto();
         }
 
         public async Task<Order> StateTaxCalculateAsync(Order pendingOrder, CancellationToken cancellationToken)
@@ -34,7 +34,7 @@ namespace EmailSenderApp.App.Clients
             {
                 MapToDto(pendingOrder);
 
-                Uri uri = new UriBuilder($"{_httpClient.BaseAddress.ToString()}api/states/tax").Uri;
+                Uri uri = new UriBuilder($"{_httpClient.BaseAddress.ToString()}api/statetax").Uri;
                 HttpRequestMessage requestMessage = BuildHttpRequest(_requestDto, HttpMethod.Post, uri);
                 _responseDto = await SendRequestAsync<ResponseDto>(requestMessage, cancellationToken);
 

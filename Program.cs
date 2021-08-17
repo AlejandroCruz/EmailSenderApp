@@ -52,15 +52,23 @@ namespace EmailSenderApp
                 App.Clients.StateTaxCalculator taxCalculator = host.Services.GetRequiredService<App.Clients.StateTaxCalculator>();
 
                 // --> DEBUG
+                Console.WriteLine("Before Tax");
                 DebugPrintResults(orders);
                 // DEBUG <--
 
                 foreach (Order pendingOrder in orders)
                 {
-                    Order orderResponse = await taxCalculator.StateTaxCalculateAsync(pendingOrder, CancellationToken.None);
+                    decimal taxAmount = 10;
+                    pendingOrder.OrderAmount += taxAmount;
+                    //Order orderResponse = await taxCalculator.StateTaxCalculateAsync(pendingOrder, CancellationToken.None);
 
-                    await repository.UpdateOrderAsync(orderResponse);
+                    await repository.UpdateOrderAsync(pendingOrder);
                 }
+
+                // --> DEBUG
+                Console.WriteLine("After Tax");
+                DebugPrintResults(orders);
+                // DEBUG <--
 
                 // TODO: Execute DB function "ReturnData"
             }
@@ -80,7 +88,7 @@ namespace EmailSenderApp
 
                 _configuration = configHost.AddJsonFile($"{CONFIG_FILE}.json", optional: false, reloadOnChange: true)
                    .AddJsonFile($"{CONFIG_FILE}.{environment.ToString() ?? "Production"}.json", optional: true)
-                   //.AddUserSecrets<Program>()
+                   .AddUserSecrets<Program>()
                    .Build();
             });
         }
@@ -123,6 +131,7 @@ namespace EmailSenderApp
                 Console.WriteLine(
                     $"ID: {order.ID}, " +
                     $"Order #: {order.OrderNumber}, " +
+                    $"Amount $: {order.OrderAmount}, " +
                     $"Doc #: {order.DocumentNumber}, " +
                     $"Order Date: {order.OrderDate}, " +
                     $"Date created: {order.CreatedDate}");

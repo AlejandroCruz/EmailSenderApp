@@ -119,9 +119,20 @@ namespace EmailSenderApp.DataInfrastructure.Repositories
             }
         }
 
-        internal Task UpdateOrderAsync(Order orderResponse)
+        internal async Task UpdateOrderAsync(Order orderResponse)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (orderResponse == null) throw new ArgumentNullException();
+                Log.Information("Updating transaction.");
+                _orderContext.Attach(orderResponse).State = EntityState.Modified;
+                await _orderContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.Message);
+                throw;
+            }
         }
     }
 }

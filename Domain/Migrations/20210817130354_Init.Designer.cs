@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmailSenderApp.Domain.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20210623221809_InitCreate")]
-    partial class InitCreate
+    [Migration("20210817130354_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
