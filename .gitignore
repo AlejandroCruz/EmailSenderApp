@@ -5,6 +5,7 @@
 
 # MyIgnores
 UserResource/
+*.userdoc.*
 /.vscode
 
 # User-specific files
