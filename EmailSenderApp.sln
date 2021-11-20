@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmailSenderApp", "EmailSend
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaxerApi", "..\TaxerApi\TaxerApi\TaxerApi.csproj", "{DE21B45D-6F96-45DF-B731-38F136767820}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserResource", "UserResource", "{F88C2E42-7A2E-4537-9D24-B523569F3FAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
