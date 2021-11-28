@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace EmailSenderApp.DataInfrastructure
+namespace EmailSenderApp.Infrastructure
 {
     public class OrderContext : DbContext
     {

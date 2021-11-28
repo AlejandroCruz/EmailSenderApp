@@ -1,6 +1,6 @@
 ﻿using EmailSenderApp.App.Clients;
-using EmailSenderApp.DataInfrastructure;
-using EmailSenderApp.DataInfrastructure.Repositories;
+using EmailSenderApp.Infrastructure;
+using EmailSenderApp.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;

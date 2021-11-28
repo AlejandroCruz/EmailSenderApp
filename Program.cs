@@ -1,4 +1,4 @@
-﻿using EmailSenderApp.DataInfrastructure.Repositories;
+﻿using EmailSenderApp.Infrastructure.Repositories;
 using EmailSenderApp.Domain.DataEntities;
 using EmailSenderApp.Domain.Extensions;
 using Microsoft.EntityFrameworkCore;

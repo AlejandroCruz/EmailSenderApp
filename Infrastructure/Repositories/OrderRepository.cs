@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EmailSenderApp.DataInfrastructure.Repositories
+namespace EmailSenderApp.Infrastructure.Repositories
 {
     public class OrderRepository
     {

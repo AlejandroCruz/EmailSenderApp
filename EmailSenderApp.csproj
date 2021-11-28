@@ -8,8 +8,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="DataInfrastructure\**" />
 	  <Compile Remove="Domain\Services\**" />
+	  <EmbeddedResource Remove="DataInfrastructure\**" />
 	  <EmbeddedResource Remove="Domain\Services\**" />
+	  <None Remove="DataInfrastructure\**" />
 	  <None Remove="Domain\Services\**" />
 	</ItemGroup>
 
@@ -41,6 +44,7 @@
 
 	<ItemGroup>
 		<Folder Include="App\Services\" />
+		<Folder Include="Presentation\" />
 	</ItemGroup>
 
 	<ProjectExtensions>
