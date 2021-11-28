@@ -44,7 +44,6 @@
 
 	<ItemGroup>
 		<Folder Include="App\Services\" />
-		<Folder Include="Presentation\" />
 	</ItemGroup>
 
 	<ProjectExtensions>
